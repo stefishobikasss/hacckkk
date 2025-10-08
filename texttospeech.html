@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Text to Speech | EASEACCESS</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f9ff;
+      text-align: center;
+    }
+
+    /* Navbar */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      padding: 1rem 4rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo { color: #3ec0ff; font-weight: 700; font-size: 1.5rem; letter-spacing: 1px; }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #130760;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    nav ul li a:hover, nav ul li a.active { color: #ffcc00; font-weight: 600; }
+
+    /* Main Section */
+    main {
+      padding: 3rem 2rem;
+      max-width: 900px;
+      margin: 3rem auto 0 auto;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    h2 { font-size: 1.8rem; color: #130760; margin-bottom: 1rem; }
+    p { color: #333; margin-bottom: 2rem; }
+
+    textarea {
+      width: 80%;
+      height: 150px;
+      padding: 1rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 1rem;
+      resize: none;
+    }
+
+    input[type="file"] { margin: 1rem; }
+
+    button {
+      background: #130760;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 0.5rem;
+      transition: background 0.3s ease;
+    }
+
+    button:hover { background: #2b0da3; }
+
+    footer {
+      margin-top: 3rem;
+      padding: 1rem;
+      color: #555;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="logo">EASEACCESS</div>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="autosubtitle.html">EaseAccess</a></li>
+      <li><a href="features.html">Features</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main -->
+  <main>
+    <h2>🗣️ Text to Speech</h2>
+    <p>Type or upload a document to hear it read aloud with natural AI voice.</p>
+
+    <textarea id="text" placeholder="Type or paste text here..."></textarea><br>
+    <input type="file" id="fileInput" accept=".txt,.pdf,.docx"><br>
+
+    <button onclick="readFile()">📂 Upload & Load Text</button>
+    <button onclick="speakWithFeedback()">🔊 Read Aloud</button>
+    <button onclick="uploadAndSpeak()">🎧 Read File Aloud</button>
+  </main>
+
+  <footer>
+    <p>© 2025 EASEACCESS | AI for Accessibility</p>
+  </footer>
+
+  <script>
+    /* -----------------------------
+       Accessibility Voice Feedback
+    ----------------------------- */
+
+    function announce(message) {
+      const utterance = new SpeechSynthesisUtterance(message);
+      utterance.lang = "en-US";
+      utterance.rate = 1;
+      speechSynthesis.speak(utterance);
+    }
+
+    // Welcome message when loaded
+    window.addEventListener("load", () => {
+      announce("Welcome to EaseAccess Text to Speech. Type or upload a file. Press Alt plus R to read text aloud, Alt plus U to upload, or Alt plus H for help.");
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener("keydown", (e) => {
+      if (e.altKey && e.key.toLowerCase() === "r") {
+        announce("Reading text aloud now.");
+        speakWithFeedback();
+      } else if (e.altKey && e.key.toLowerCase() === "u") {
+        announce("Choose a file to upload.");
+        document.getElementById("fileInput").click();
+      } else if (e.altKey && e.key.toLowerCase() === "h") {
+        announce("Shortcuts: Alt plus R to read text. Alt plus U to upload a file. Alt plus H to hear help again.");
+      }
+    });
+
+    /* -----------------------------
+       Core Text to Speech Features
+    ----------------------------- */
+
+    async function uploadAndSpeak() {
+      const file = document.getElementById('fileInput').files[0];
+      if (!file) return announce("Please upload a file first!");
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/tts", { method: "POST", body: formData });
+      const audioBlob = await res.blob();
+      const audioURL = URL.createObjectURL(audioBlob);
+      new Audio(audioURL).play();
+      announce("File read aloud complete.");
+    }
+
+    async function readFile() {
+      const file = document.getElementById('fileInput').files[0];
+      if (!file) return announce("Please choose a file first!");
+
+      const ext = file.name.split('.').pop().toLowerCase();
+      const reader = new FileReader();
+
+      if (ext === 'txt') {
+        reader.onload = () => { document.getElementById('text').value = reader.result; announce("Text file loaded successfully."); };
+        reader.readAsText(file);
+      } else if (ext === 'pdf') {
+        const pdfjsLib = await import("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.mjs");
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        let text = '';
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const content = await page.getTextContent();
+          text += content.items.map(item => item.str).join(' ') + '\n';
+        }
+        document.getElementById('text').value = text.trim();
+        announce("PDF text loaded successfully.");
+      } else if (ext === 'docx') {
+        const mammoth = await import("https://unpkg.com/mammoth@1.6.0/dist/mammoth.browser.min.js");
+        const arrayBuffer = await file.arrayBuffer();
+        const result = await mammoth.extractRawText({ arrayBuffer });
+        document.getElementById('text').value = result.value.trim();
+        announce("Word document loaded successfully.");
+      } else {
+        announce("Unsupported file type. Please upload .txt, .pdf, or .docx.");
+      }
+    }
+
+    async function speak() {
+      const text = document.getElementById('text').value.trim();
+      if (!text) return announce("Please enter or upload some text first!");
+
+      try {
+        const res = await fetch('/api/tts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text })
+        });
+
+        if (!res.ok) throw new Error("TTS request failed");
+
+        const audioBlob = await res.blob();
+        const audioURL = URL.createObjectURL(audioBlob);
+        new Audio(audioURL).play();
+      } catch (err) {
+        announce("Sorry, text to speech failed.");
+      }
+    }
+
+    async function speakWithFeedback() {
+      announce("Starting speech conversion now.");
+      await speak();
+      announce("Speech playback finished.");
+    }
+  </script>
+
+</body>
+</html>

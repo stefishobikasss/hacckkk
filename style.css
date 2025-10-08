@@ -1,0 +1,144 @@
+/* Reset some defaults */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    color: #222;
+    line-height: 1.6;
+}
+
+/* Navbar */
+nav {
+    background-color: white; /* Accessible green */
+    color: rgb(111, 205, 228);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+}
+
+nav h1 {
+    font-size: 1.8rem;
+}
+
+/* Header */
+header {
+    text-align: center;
+    padding: 3rem 1rem;
+    /* background: linear-gradient(135deg, #130760, #d4d1f9); */
+    color: black;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    font-size: 2.5rem;
+}
+.herosection p {
+    font-size: 1.2rem;
+    margin-bottom: 300px;
+    color: #555;
+}
+/* Grid container */
+.grid {
+    display: grid;
+    gap: 2rem;
+    padding: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+/* Sections */
+/* Sections (default: white cards) */
+section {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+/* Remove background for the intro section inside .container */
+.container section {
+    background-color: transparent;
+    box-shadow: none;
+    padding: 1rem 0; /* lighter padding */
+}
+/* section {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+} */
+
+/* section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+} */
+
+section p {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+/* Image styling inside sections */
+section img {
+    width: 100%;
+    max-width: 250px;   /* keeps them from being too big */
+    height: 180px;      /* consistent height */
+    object-fit: cover;  /* crops to fit nicely */
+    border-radius: 10px;
+    margin-bottom: 1rem; /* spacing below image */
+    display: block;
+    margin-left: auto;
+    margin-right: auto; /* centers the image */
+}
+
+/* Buttons */
+button {
+    background-color: #130760; /* Accessible green */
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+
+    background-color: #130760; /* Accessible green */
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #333;
+    color: white;
+    margin-top: 2rem;
+}
+
+/* Responsive Typography */
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 2rem;
+    }
+
+    section p {
+        font-size: 1rem;
+    }
+
+    button {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1.1rem;
+    }
+}

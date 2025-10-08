@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EASEACCESS</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* 🔹 NAVBAR STYLING */
+    .navbar {
+      background: white;
+      color: rgb(95, 222, 244);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .nav-right {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-right a {
+      color: rgb(95, 222, 244);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav-right a:hover,
+    .nav-right a.active {
+      color: #ffd700;
+      text-decoration: underline;
+    }
+
+    /* 🔹 MOBILE NAV RESPONSIVE */
+    @media (max-width: 768px) {
+      .nav-right {
+        display: none;
+        flex-direction: column;
+        background:rgb(95, 222, 244); 
+        position: absolute;
+        top: 60px;
+        right: 0;
+        width: 200px;
+        padding: 1rem;
+      }
+
+      .nav-right.show {
+        display: flex;
+      }
+
+      .menu-toggle {
+        display: block;
+        cursor: pointer;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .menu-toggle {
+        display: none;
+      }
+    }
+
+    .menu-toggle {
+      color: white;
+      font-size: 1.8rem;
+      background: none;
+      border: none;
+    }
+
+    /* 🔹 HERO SECTION */
+    .hero-section {
+      position: relative;
+      text-align: center;
+      color: black;
+      padding: 5rem 2rem;
+      background: url('bgg.jpg') center/cover no-repeat; /* 🔸 Replace this with your image path */
+      background-attachment: fixed;
+      min-height: 700px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      margin-bottom: 100px;
+    }
+
+    /* Overlay for readability */
+    .hero-section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: transparent; /* Light overlay for contrast */
+      z-index: 0;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+    }
+
+    .hero-section h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .hero-section p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .hero-btn {
+      background: rgb(95, 222, 244);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s ease;
+      margin-bottom: 400px;
+    }
+
+    .hero-btn:hover {
+      background: rgb(95, 222, 244);;
+    }
+
+    /* 🔹 FEATURES SECTION */
+   .features-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 80px;
+  padding: 3rem 2rem;
+}
+
+/* Feature container */
+.feature {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr; /* image - text ratio */
+  align-items: center;
+  background: transparent;
+  border-radius: 16px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  width: 95%;              /* very wide layout */
+  max-width: 1200px;       /* expands more on larger screens */
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 2rem 2.5rem;
+  gap: 2rem;
+}
+
+.feature:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* Left column image */
+.feature-image img {
+  width: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  height: auto;
+  max-height: 250px;
+
+}
+
+
+/* Right column text */
+.feature-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+}
+
+.feature-text h3 {
+  font-size: 1.8rem;
+  color: #130760;
+  margin-bottom: 0.8rem;
+}
+
+.feature-text p {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 1.2rem;
+  line-height: 1.6;
+}
+
+/* Buttons */
+.feature-text button {
+  background-color: #130760;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-self: flex-start;
+}
+
+.feature-text button:hover {
+  background-color: #2b1a89;
+}
+
+/* Responsive for tablets/mobiles */
+@media (max-width: 900px) {
+  .feature {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .feature-text {
+    align-items: center;
+  }
+
+  .feature-text button {
+    align-self: center;
+  }
+
+  .feature-image img {
+    height: 200px;
+  }
+}
+
+
+    /* 🔹 ABOUT SECTION */
+    .about {
+      background: #f5f5f5;
+      padding: 3rem 2rem;
+      text-align: center;
+      margin-bottom: 200px;
+    }
+
+    .about h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: rgb(95, 222, 244);
+    }
+
+    .about p {
+      max-width: 800px;
+      margin: 0 auto;
+      font-size: 1.1rem;
+      color: #333;
+    }
+
+    /* 🔹 FOOTER */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      background-color: #333;
+      color: white;
+      margin-top: 2rem;
+    }
+
+  </style>
+</head>
+
+<body>
+  <!-- 🔹 NAVIGATION BAR -->
+  <nav class="navbar">
+    <div class="nav-left">
+      <h1 class="logo">EASEACCESS</h1>
+    </div>
+    <button class="menu-toggle" aria-label="Toggle navigation">☰</button>
+    <div class="nav-right">
+      <a href="#home" class="active">Home</a>
+      <a href="#about">EaseAccess</a>
+      <a href="#features">Features</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <!-- 🔹 HERO SECTION -->
+  <header id="home" class="hero-section">
+    <div class="hero-content" data-aos="fade-right">
+      <h1>AI for Accessibility</h1>
+      <p>
+        EASEACCESS empowers all students by using AI to make campus resources accessible — through live subtitles, text-to-speech, and smart navigation tools.
+      </p>
+      <a href="#features" class="hero-btn">Explore Features</a>
+    </div>
+  </header>  
+  <!-- 🔹 ABOUT SECTION -->
+  
+  <section id="about" class="about" data-aos="fade-up">
+    <h2>About EaseAccess</h2>
+    <p>
+        Our mission is to make education inclusive for everyone. With AI-powered accessibility tools, EASEACCESS ensures every student — regardless of ability — can fully engage with campus life and learning. We strive to break down barriers that hinder participation, providing personalized support that adapts to each student’s unique needs. By integrating cutting-edge technology with empathy and understanding, we aim to create a learning environment where everyone feels empowered, valued, and capable of achieving their full potential. Our vision is a campus where accessibility is seamless, education is equitable, and every student has the tools and confidence to thrive academically, socially, and personally.
+    </p>
+  </section>
+
+
+  <!-- 🔹 FEATURES SECTION -->
+  <!-- <section id="features" class="features-grid">
+    <div class="feature" data-aos="fade-up">
+      <img src="speechtotext.jpg" alt="Speech to text illustration">
+      <h3>Automatic Subtitles</h3>
+      <p>Real-time subtitles are generated based on speech to assist hearing-impaired students.</p>
+      <a href="autosubtitles.html" target="_blank"><button>Try Subtitles</button></a>
+    </div>
+
+    <div class="feature" data-aos="fade-up" data-aos-delay="100">
+      <img src="tts1.jpg" alt="Text to speech illustration">
+      <h3>Text-to-Speech</h3>
+      <p>Convert any text into natural speech to assist visually impaired students.</p>
+      <a href="texttospeech.html" target="_blank"><button>Try Text-to-Speech</button></a>
+    </div>
+
+    <div class="feature" data-aos="fade-up" data-aos-delay="200">
+      <img src="location.jpg" alt="Navigation illustration">
+      <h3>Smart Navigation</h3>
+      <p>Scan QR codes around campus to get guided directions to classrooms and facilities.</p>
+      <button disabled>Coming Soon</button>
+    </div>
+  </section> -->
+<section id="features" class="features-grid">
+  <div class="feature" data-aos="fade-up">
+    <div class="feature-image">
+      <img src="speechtotext.jpg" alt="Speech to text illustration">
+    </div>
+    <div class="feature-text">
+      <h3>Automatic Subtitles</h3>
+      <p>
+        Real-time subtitles are generated based on speech to assist hearing-impaired students.
+      </p>
+      <a href="autosubtitles.html" target="_blank">
+        <button>Try Subtitles</button>
+      </a>
+    </div>
+  </div>
+
+  <div class="feature" data-aos="fade-up" data-aos-delay="100">
+    <div class="feature-image">
+      <img src="tts1.jpg" alt="Text to speech illustration">
+    </div>
+    <div class="feature-text">
+      <h3>Text-to-Speech</h3>
+      <p>
+        Convert any text into natural speech to assist visually impaired students.
+      </p>
+      <a href="texttospeech.html" target="_blank">
+        <button>Try Text-to-Speech</button>
+      </a>
+    </div>
+  </div>
+
+  <div class="feature" data-aos="fade-up" data-aos-delay="200">
+    <div class="feature-image">
+      <img src="location.jpg" alt="Navigation illustration">
+    </div>
+    <div class="feature-text">
+      <h3>Smart Navigation</h3>
+      <p>
+        Scan QR codes around campus to get guided directions to classrooms and facilities.
+      </p>
+      <button disabled>Coming Soon</button>
+    </div>
+  </div>
+</section>
+
+
+  
+  <!-- 🔹 FOOTER -->
+  <footer id="contact">
+    <p>© 2025 EASEACCESS | Built for inclusive learning environments</p>
+  </footer>
+
+  <!-- 🔹 SCRIPTS -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init();
+
+    // 🔸 Smooth scroll active link highlight
+    const sections = document.querySelectorAll("section, header");
+    const navLinks = document.querySelectorAll(".nav-right a");
+
+    window.addEventListener("scroll", () => {
+      let current = "";
+      sections.forEach((section) => {
+        const sectionTop = section.offsetTop - 80;
+        if (scrollY >= sectionTop) current = section.getAttribute("id");
+      });
+
+      navLinks.forEach((a) => {
+        a.classList.remove("active");
+        if (a.getAttribute("href") === `#${current}`) {
+          a.classList.add("active");
+        }
+      });
+    });
+
+    // 🔸 Mobile menu toggle
+    const menuBtn = document.querySelector(".menu-toggle");
+    const navRight = document.querySelector(".nav-right");
+    menuBtn.addEventListener("click", () => {
+      navRight.classList.toggle("show");
+    });
+  </script>
+</body>
+</html>
